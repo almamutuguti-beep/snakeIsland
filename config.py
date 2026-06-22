@@ -22,5 +22,11 @@ wall_h_symbol: str = '-'  # horizontal wall
 wall_v_symbol: str = '|'  # vertical wall
 corner_symbol: str = '+'  # wall corners
 
+# SCORING
+points_per_food: int = 10  # points for eating food
+
+# Game limits
+max_cells: int = board_width * board_height  # game is won when all cells on the board are filled
+
 
 

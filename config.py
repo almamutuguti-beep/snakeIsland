@@ -13,4 +13,14 @@ initial_snake_length: int = 3
 initial_head_x: int = board_width // 2
 initial_head_y: int = board_height // 2
 
+# Symbols used 
+head_symbol: str = 'O'  # snake head
+body_symbol: str = 'o'  # snake body
+food_symbol: str = '*'  # food
+empty_symbol: str = '.'  # empty space
+wall_h_symbol: str = '-'  # horizontal wall
+wall_v_symbol: str = '|'  # vertical wall
+corner_symbol: str = '+'  # wall corners
+
+
 

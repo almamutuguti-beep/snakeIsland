@@ -21,9 +21,8 @@ def main() -> None:
         from snake_game.cli import run_game
     except ModuleNotFoundError as e:
         print(f"[SnakeIsland] Cannot import game modules: {e} \n"
-              "Make sure you are running from the project root directory: python main.py"
-              file=sys.stderr, 
-              ),
+              "Make sure you are running from the project root directory: python main.py \n"
+              file=sys.stderr),
         
         sys.exit(1)
 
@@ -34,3 +33,14 @@ print("Welcome to Snake Island! - console edition")
 print("="* 42)
 print("Controls: W - Up | A - Left | S - Down | D - Right | Enter - Confirm | Q - Quit")
 print("="* 42 + "\n")
+
+# Hand off to the cli runner 
+
+try:
+    run_game()
+except KeyboardInterrupt:
+    print("\n[SnakeIsland] Game interrupted by user. Exiting...")
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

@@ -3,11 +3,6 @@ from snake_game.models import self
 from snake_game.models import random
 
 
-    
-
-
-
-
 class Food:
     def __init__(self, grid_width, grid_height, cell_size=20):
         self.grid_width = grid_width

@@ -10,13 +10,14 @@ class GameEngine:
         self.snake = snake()
         self.food = food()
         self.score = 0
-        self.game_over = False
+        self.game_over = False 
     
     def reset(self):
         self.snake.reset()
         self.score = 0
         self.game_over = False
         self.food.spawn(self.snake.get_boddy_positions())
+        
     def change_direction(self, new_direction: Direction):
         self.snake.change_direction(new_direction)
 

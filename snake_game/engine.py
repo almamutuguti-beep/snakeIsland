@@ -17,11 +17,11 @@ class GameEngine:
         self.score = 0
         self.game_over = False
         self.food.spawn(self.snake.get_boddy_positions())
-        
+
     def change_direction(self, new_direction: Direction):
         self.snake.change_direction(new_direction)
 
-    def _check_wall_collision(self,head_x,head_y):
+    def _check_wall_collision(self,head_x,head_y): 
         if head_x < 0 or head_x >= board_width :
             return True
         if head_y < 0 or head_y >= board_height :

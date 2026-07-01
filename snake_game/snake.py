@@ -6,7 +6,7 @@ class snake:
         self.grow_pending = False
 
         def change_direction(self, new_direction):
-            if (new direction[0] * -1, new_direction[1] * -1) != self.direction:
+            if (new_direction[0] * -1, new_direction[1] * -1) != self.direction:
                 self.direction = new_direction 
                 
                 def move(self):
@@ -24,7 +24,7 @@ class snake:
                             def get_head_position(self):
                                 return self.body[0]
                             
-                            def get_body_positions(self);
+                            def get_body_positions(self):
                                 return self.body
                             
                             def check_collision(self, position):
@@ -41,7 +41,7 @@ class snake:
                                 def get_direction(self):
                                     return self.direction
                             
-                            def set_direction(self, new_direction);
+                            def set_direction(self, new_direction):
                                 self.direction = new_direction
 
                                 def get_cell_size(self):

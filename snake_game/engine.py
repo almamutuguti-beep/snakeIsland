@@ -3,6 +3,7 @@ from snake import snake
 from food import food
 from config import board_width, board_height, points_per_food
 from snake_game.models import Direction
+from sound import play_eat, play_gameover
 
 class GameEngine:
     def __init__(self, config):
@@ -45,5 +46,12 @@ class GameEngine:
             self.snake.grow()
             self.score += points_per_food
             self.food.spawn(self.snake.get_body_positions())
-
+        
+        if head==self.food.get_position():
+            play_eat()
+            self.snake.grow()
+            self.score  += points_per_food
+            
+            self.game_over = True
+            gameover_sound.play()
             

@@ -1,7 +1,7 @@
-from snake import snake
-from food import food
-from config import board_width, board_height, points_per_food
-from snake_game.models import Direction
+from backend.snake_game.snake import snake
+from backend.snake_game.food import food
+from backend.snake_game.config import board_width, board_height, points_per_food
+from backend.snake_game.models import Direction
 
 class GameEngine:
     def __init__(self, config):

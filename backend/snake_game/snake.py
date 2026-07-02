@@ -1,5 +1,5 @@
 from turtle import position
-from models import Point, Direction
+from backend.snake_game.models import Point, Direction
 
 
 class snake:

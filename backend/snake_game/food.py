@@ -1,6 +1,6 @@
-from snake_game.models import Point 
-from snake_game.models import self 
-from snake_game.models import random
+from backend.snake_game.models import Point 
+from backend.snake_game.models import self 
+from backend.snake_game.models import random
 
 
     

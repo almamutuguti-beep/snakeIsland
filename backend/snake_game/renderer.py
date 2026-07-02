@@ -8,8 +8,8 @@ The rendering functions are designed to be efficient and responsive, ensuring th
 """
 from __future__ import annotations
 
-from snake_game import config
-from snake_game.models import GameStatus, Point
+from backend.snake_game import config
+from backend.snake_game.models import GameStatus, Point
 
 def render_board(state) -> str:
     """

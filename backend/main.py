@@ -11,6 +11,7 @@
 # Q - Quit the game
 
 import sys
+from backend.snake_game.cli import run_game
 
 def main() -> None:
     """

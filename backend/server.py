@@ -34,9 +34,9 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allows_origins = ["http://localhost:5173"],
+    allow_origins=["http://localhost:5173"],
     allow_methods=["*"],
-    allows_headers=["*"],
+    allow_headers=["*"],
 )
 
 def state_to_json(engine: GameEngine) -> str:

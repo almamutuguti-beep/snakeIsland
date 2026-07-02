@@ -1,8 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import FrozenSet, Tuple
-
-from backend.snake_game.models import Point, Direction, GameStatus
+from snake_game.models import Point, Direction, GameStatus
 
 @dataclass(frozen=True)
 class GameState:

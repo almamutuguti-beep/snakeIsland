@@ -20,9 +20,9 @@ def main() -> None:
     try:
         from snake_game.cli import run_game
     except ModuleNotFoundError as e:
-        print(f"[SnakeIsland] Cannot import game modules: {e} \n"
-              "Make sure you are running from the project root directory: python main.py \n"
-              file=sys.stderr),
+        print(f"[SnakeIsland] Cannot import game modules: {e} \n", file=sys.stderr)
+        #   "Make sure you are running from the project root directory: python main.py \n"
+
         
         sys.exit(1)
 

@@ -83,4 +83,3 @@ def run_game() -> None:
             print(render_board(state))
             print("Game Over! Thanks for playing!")
             return
-

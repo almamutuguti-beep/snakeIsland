@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 
 interface GameControllerProps {
   onDirection: (direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => void;
@@ -24,8 +24,6 @@ export function GameController({
   onReset,
   gameStatus,
 }: GameControllerProps) {
-  const lastDirectionRef = useRef<string | null>(null);
-
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const key = event.key;
@@ -36,8 +34,7 @@ export function GameController({
       }
 
       const direction = DIRECTION_KEYS[key as keyof typeof DIRECTION_KEYS];
-      if (direction && direction !== lastDirectionRef.current) {
-        lastDirectionRef.current = direction;
+      if (direction) {
         onDirection(direction);
         event.preventDefault();
       }
@@ -56,7 +53,6 @@ export function GameController({
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      {/* Mobile/Touch Controls */}
       <div className="flex flex-col gap-2 items-center md:flex md:flex-col">
         <button
           onClick={() => handleButtonClick('UP')}
@@ -97,13 +93,11 @@ export function GameController({
         </div>
       </div>
 
-      {/* Keyboard Instructions */}
       <div className="text-center text-sm text-muted-foreground space-y-1">
         <p className="font-mono">Use Arrow Keys or WASD to move</p>
         <p className="font-mono text-accent">Press R to reset</p>
       </div>
 
-      {/* Reset Button */}
       <button
         onClick={onReset}
         className="px-8 py-2 bg-accent/20 hover:bg-accent/40 border border-accent/50 rounded-lg font-mono font-bold text-accent transition-all"

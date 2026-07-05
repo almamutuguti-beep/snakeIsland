@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { GameBoard } from './game-board';
 import { GameController } from './game-controller';
+import { saveScore } from '@/lib/leaderboard';
 
 interface GameState {
   type: string;
@@ -16,25 +17,28 @@ interface GameState {
 
 interface GameContainerProps {
   wsUrl?: string;
+  onExit?: () => void;
+  onViewLeaderboard?: () => void;
 }
 
 export function GameContainer({
   wsUrl = 'ws://localhost:8000/ws/game',
+  onExit,
+  onViewLeaderboard,
 }: GameContainerProps) {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const scoreSavedRef = useRef(false);
 
-  // Connect to WebSocket
   useEffect(() => {
     const connect = () => {
       try {
         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-          console.log('[v0] WebSocket connected');
           setIsConnected(true);
           setError(null);
         };
@@ -49,20 +53,16 @@ export function GameContainer({
         };
 
         ws.onerror = () => {
-          console.error('[v0] WebSocket error');
           setError('Connection error. Attempting to reconnect...');
         };
 
         ws.onclose = () => {
-          console.log('[v0] WebSocket disconnected');
           setIsConnected(false);
-          // Attempt to reconnect after 2 seconds
           reconnectTimeoutRef.current = setTimeout(connect, 2000);
         };
 
         wsRef.current = ws;
       } catch (err) {
-        console.error('[v0] WebSocket connection failed:', err);
         setError('Failed to connect to game server');
       }
     };
@@ -78,6 +78,18 @@ export function GameContainer({
       }
     };
   }, [wsUrl]);
+
+  useEffect(() => {
+    if (!gameState) return;
+    if (gameState.status === 'RUNNING') {
+      scoreSavedRef.current = false;
+      return;
+    }
+    if (!scoreSavedRef.current) {
+      scoreSavedRef.current = true;
+      saveScore(gameState.score, `${gameState.board_width}x${gameState.board_height}`);
+    }
+  }, [gameState]);
 
   const sendMessage = useCallback((msg: object) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -100,13 +112,13 @@ export function GameContainer({
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4">
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-primary">🐍 Snake Game</h1>
+          <h1 className="text-4xl font-bold text-primary">SnakeIsland</h1>
           <p className="text-muted-foreground">
             {error || (isConnected ? 'Waiting for game...' : 'Connecting...')}
           </p>
         </div>
         {error && (
-          <div className="text-danger text-sm max-w-md text-center">{error}</div>
+          <div className="text-destructive text-sm max-w-md text-center">{error}</div>
         )}
         <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
       </div>
@@ -115,10 +127,10 @@ export function GameContainer({
 
   const statusMessage =
     gameState.status === 'WON'
-      ? '🎉 You Won!'
+      ? 'You Won!'
       : gameState.status === 'LOST'
-        ? '💀 Game Over!'
-        : '🎮 Playing';
+        ? 'Game Over'
+        : 'Playing';
 
   const statusColor =
     gameState.status === 'WON'
@@ -129,47 +141,28 @@ export function GameContainer({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-8 p-4 bg-background">
-      {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary">
-          🐍 Snake Game
-        </h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-primary">SnakeIsland</h1>
         <p className="text-sm text-muted-foreground">
           {isConnected ? '● Connected' : '● Disconnected'}
         </p>
       </div>
 
-      {/* Game Info */}
       <div className="flex gap-8 md:gap-12 flex-wrap justify-center">
         <div className="text-center space-y-1">
-          <p className="text-sm text-muted-foreground uppercase tracking-wider">
-            Score
-          </p>
-          <p className="text-3xl md:text-4xl font-bold text-accent">
-            {gameState.score}
-          </p>
+          <p className="text-sm text-muted-foreground uppercase tracking-wider">Score</p>
+          <p className="text-3xl md:text-4xl font-bold text-accent">{gameState.score}</p>
         </div>
-
         <div className="text-center space-y-1">
-          <p className="text-sm text-muted-foreground uppercase tracking-wider">
-            Length
-          </p>
-          <p className="text-3xl md:text-4xl font-bold text-primary">
-            {gameState.snake_body.length}
-          </p>
+          <p className="text-sm text-muted-foreground uppercase tracking-wider">Length</p>
+          <p className="text-3xl md:text-4xl font-bold text-primary">{gameState.snake_body.length}</p>
         </div>
-
         <div className="text-center space-y-1">
-          <p className="text-sm text-muted-foreground uppercase tracking-wider">
-            Status
-          </p>
-          <p className={`text-3xl md:text-4xl font-bold ${statusColor}`}>
-            {statusMessage}
-          </p>
+          <p className="text-sm text-muted-foreground uppercase tracking-wider">Status</p>
+          <p className={`text-3xl md:text-4xl font-bold ${statusColor}`}>{statusMessage}</p>
         </div>
       </div>
 
-      {/* Game Board */}
       <div className="flex justify-center">
         <GameBoard
           snakeBody={gameState.snake_body}
@@ -179,20 +172,33 @@ export function GameContainer({
         />
       </div>
 
-      {/* Controls */}
       <GameController
         onDirection={handleDirection}
         onReset={handleReset}
         gameStatus={gameState.status}
       />
 
-      {/* Footer */}
+      <div className="flex gap-3">
+        {onViewLeaderboard && (
+          <button
+            onClick={onViewLeaderboard}
+            className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:opacity-90 transition-opacity text-sm"
+          >
+            Leaderboard
+          </button>
+        )}
+        {onExit && (
+          <button
+            onClick={onExit}
+            className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:opacity-90 transition-opacity text-sm"
+          >
+            Change level
+          </button>
+        )}
+      </div>
+
       <div className="text-center text-xs text-muted-foreground space-y-1">
         <p>Board: {gameState.board_width}×{gameState.board_height}</p>
-        <p>
-          Connected to:{' '}
-          <span className="font-mono text-primary">{wsUrl}</span>
-        </p>
       </div>
     </div>
   );

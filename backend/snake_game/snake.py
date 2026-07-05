@@ -79,3 +79,7 @@ class Snake:
 
     def set_head(self, new_head):
         self.body[0] = new_head
+        
+    def collides_with_trail(self):
+        """Wall trail cells block movement."""
+        return self.trail.is_wall(self.body[0])

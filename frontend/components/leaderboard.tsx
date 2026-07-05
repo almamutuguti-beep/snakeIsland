@@ -26,20 +26,18 @@ export function Leaderboard({ onBack }: LeaderboardProps) {
           <thead>
             <tr className="text-muted-foreground text-sm uppercase tracking-wider">
               <th className="pb-2">#</th>
+              <th className="pb-2">Player</th>
               <th className="pb-2">Score</th>
               <th className="pb-2">Board</th>
-              <th className="pb-2">Date</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry, i) => (
               <tr key={i} className="border-t border-border">
                 <td className="py-2 text-primary font-semibold">{i + 1}</td>
+                <td className="py-2">{entry.player}</td>
                 <td className="py-2 font-bold text-accent">{entry.score}</td>
-                <td className="py-2 text-muted-foreground">{entry.boardSize}</td>
-                <td className="py-2 text-muted-foreground text-xs">
-                  {new Date(entry.date).toLocaleDateString()}
-                </td>
+                <td className="py-2 text-muted-foreground text-xs">{entry.boardSize}</td>
               </tr>
             ))}
           </tbody>

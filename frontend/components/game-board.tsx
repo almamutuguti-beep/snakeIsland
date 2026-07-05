@@ -23,10 +23,9 @@ function getFacingDirection(snakeBody: [number, number][]): FacingDirection {
   return 'UP';
 }
 
-const HEAD_LAYOUT: Record
-  FacingDirection,
-  { eyes: [number, number][]; tongueEnd: [number, number] }
-> = {
+type HeadLayoutEntry = { eyes: [number, number][]; tongueEnd: [number, number] };
+
+const HEAD_LAYOUT: Record<FacingDirection, HeadLayoutEntry> = {
   RIGHT: { eyes: [[16, 7], [16, 17]], tongueEnd: [24, 12] },
   LEFT: { eyes: [[8, 7], [8, 17]], tongueEnd: [0, 12] },
   UP: { eyes: [[7, 8], [17, 8]], tongueEnd: [12, 0] },

@@ -53,5 +53,4 @@ class GameEngine:
             self.score  += points_per_food
             
             self.game_over = True
-            gameover_sound.play()
-            
+            play_gameover()
